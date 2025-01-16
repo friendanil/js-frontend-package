@@ -7,5 +7,5 @@ export const environment = {
   baseURL: 'https://theta.boomconcole.com/api/v1',
   baseNodeUrl: 'https://theta.boomconcole.com',
   boomURL: 'https://theta.boomconcole.com',
-  aiURL: 'https://www.devai.freeschema.com/api'
+  aiURL: 'https://www.devai.freeschema.com/api',
 }

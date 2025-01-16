@@ -9,11 +9,12 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@types/node": "^22.9.0",
     "typescript": "^5.2.2",
     "vite": "^5.3.1"
   },
   "dependencies": {
-    "mftsccs-browser": "^1.1.1"
+    "mftsccs-browser": "^2.0.19-beta"
   },
   "description": "This is a data fabric project that unifies frontend and backend",
   "main": "src/main.ts",

@@ -7,7 +7,7 @@ import { ListTask } from "./list.tasklist";
 export class tasklist extends StatefulWidget
 {
 
-    mountChildWidgets(){
+    mount_child(){
         
 
         let widget1 = this.getElementById("widget1");

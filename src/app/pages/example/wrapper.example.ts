@@ -1,6 +1,6 @@
 // src/app/pages/example/wrapper.example.ts
 
-import { StatefulWidget } from "mftsccs-browser";
+import { StatefulWidget } from 'mftsccs-browser'
 import { create } from "./create.example";
 import { list } from "./list.example";
 import './phonebook.style.css';
@@ -8,7 +8,7 @@ import './phonebook.style.css';
 export class phonebook extends StatefulWidget
 {
 
-    mountChildWidgets(){
+    mount_child(){
         let widget1 = this.getElementById("widget1");
         let widget2 = this.getElementById("widget2");
         let creating =new create();

@@ -5,7 +5,7 @@ import { selector } from "./selector.tasklist";
 export class CreateTask extends StatefulWidget
 {
     selectedPhonebook: Concept= CreateDefaultConcept();
-    mountChildWidgets(){
+    mount_child(){
         let widget1 = this.getElementById("widget1");
         let selecting =new selector();
 

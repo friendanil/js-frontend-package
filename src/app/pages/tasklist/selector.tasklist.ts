@@ -52,17 +52,17 @@ export class selector extends StatefulWidget{
      * @param identifier code to get all the elements by class name inside of the component.
      * @returns 
      */
-    getElementByClassName(identifier: string){
-        let element = this.getComponent();
-        let selectedElements: HTMLElement[] = [];
-        if(element){
-          let myelements = element.querySelectorAll('.'+identifier);
-          myelements.forEach((element) => {
-            selectedElements.push(<HTMLElement>element);
-          });
-        }
-        return selectedElements;
-      }
+    // getElementByClassName(identifier: string){
+    //     let element = this.getComponent();
+    //     let selectedElements: HTMLElement[] = [];
+    //     if(element){
+    //       let myelements = element.querySelectorAll('.'+identifier);
+    //       myelements.forEach((element) => {
+    //         selectedElements.push(<HTMLElement>element);
+    //       });
+    //     }
+    //     return selectedElements;
+    //   }
 
 
     getHtml(): string {

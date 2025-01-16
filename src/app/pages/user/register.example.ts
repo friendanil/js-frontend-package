@@ -1,5 +1,6 @@
 // src/app/pages/user/register.example.ts
-import { Signup, SignupModel, StatefulWidget } from "mftsccs-browser";
+import { Signup, SignupModel } from "mftsccs-browser";
+import { StatefulWidget } from "mftsccs-browser";
 import { updateContent } from "../../routes/renderRoute.service";
 export class register extends StatefulWidget{
 

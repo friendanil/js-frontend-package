@@ -8,6 +8,7 @@ import { tasklist } from "../pages/tasklist/wrapper.tasklist.ts";
 import { login } from "../pages/user/login.example.ts";
 import { logout } from "../pages/user/logout.example.ts";
 import { register } from "../pages/user/register.example.ts";
+import { createContacts } from "../pages/contacts/create.contact.ts";
 
 type RouteParams = {
   /**
@@ -83,7 +84,7 @@ const routes: RouteParams[] = [
     path: "/404",
     linkLabel: "404",
     content: noPageFoundIndex,
-  },
+  }
 ];
 
 export default routes;
