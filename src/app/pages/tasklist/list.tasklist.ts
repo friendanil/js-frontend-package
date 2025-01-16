@@ -8,7 +8,7 @@ export class ListTask extends StatefulWidget{
     linker: string = "console_folder_s";
 
 
-    widgetDidMount(): void {
+    before_render(): void {
 
         let searchStructure: SearchStructure = new SearchStructure();
         searchStructure.composition = "the_task";
@@ -33,7 +33,7 @@ export class ListTask extends StatefulWidget{
 
 
 
-    addEvents() {
+    after_render() {
       let tableElement = this.getElementById("mainbody");
       if(tableElement){
         console.log("this is the element", tableElement);

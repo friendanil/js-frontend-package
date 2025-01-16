@@ -25,7 +25,7 @@ export class CreateTask extends StatefulWidget
      * These are the events that user adds. These could be any thing like populating the data to creating the data
      * 
      */
-    addEvents(): void {
+    after_render(): void {
         let userId:number = getLocalUserId();
         let order: 1;
         let name = this.getElementById("name") as HTMLInputElement;

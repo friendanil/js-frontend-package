@@ -5,7 +5,7 @@ export class selector extends StatefulWidget{
     inpage: number= 10;
     phonebooks:any;
     page: number = 1;
-    widgetDidMount(): void {
+    before_render(): void {
         let userId: number = getLocalUserId();
         GetCompositionListListener("the_phonebook", userId, this.inpage, this.page, NORMAL).subscribe((output: any)=>{
             this.phonebooks = output;
@@ -20,7 +20,7 @@ export class selector extends StatefulWidget{
      * These are the events that user adds. These could be any thing like populating the data to creating the data
      * 
      */
-    addEvents(): void {
+    after_render(): void {
         let phonebookData = this.phonebooks;
 
         let selector = this.getElementById("phonelist") as HTMLInputElement;

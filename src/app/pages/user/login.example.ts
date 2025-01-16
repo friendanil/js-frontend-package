@@ -10,7 +10,7 @@ export class login extends StatefulWidget{
      * These are the events that user adds. These could be any thing like populating the data to creating the data
      * 
      */
-        addEvents(): void {
+        after_render(): void {
             let email = this.getElementById("email") as HTMLInputElement;
             let password = this.getElementById("password") as HTMLInputElement;
             let submitButton = this.getElementById("submit");

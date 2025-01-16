@@ -4,7 +4,7 @@ import { updateContent } from "../../routes/renderRoute.service";
 export class register extends StatefulWidget{
 
 
-    addEvents(): void {
+    after_render(): void {
         let email = this.getElementById("email") as HTMLInputElement;
         let password = this.getElementById("password") as HTMLInputElement;
         let submitButton = this.getElementById("submit");

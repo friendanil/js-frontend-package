@@ -10,7 +10,7 @@ export class list extends StatefulWidget{
     linker: string = "console_folder_s";
 
 
-    widgetDidMount(): void {
+    before_render(): void {
         let userId: number = getLocalUserId();
         GetCompositionListListener("the_phonebook", userId, this.inpage, this.page, NORMAL).subscribe((output: any)=>{
             this.phonebooks = output;
@@ -21,7 +21,7 @@ export class list extends StatefulWidget{
 
 
 
-    addEvents() {
+    after_render() {
       let tableElement = this.getElementById("mainbody");
       if(tableElement){
         console.log("this is the element", tableElement);

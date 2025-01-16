@@ -3,7 +3,7 @@ import { updateContent } from "../../routes/renderRoute.service";
 
 export class logout extends StatefulWidget{
 
-    addEvents(): void {
+    after_render(): void {
         localStorage.removeItem("profile");
         updateContent("/");
         location.reload();
