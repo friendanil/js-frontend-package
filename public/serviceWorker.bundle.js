@@ -21738,6 +21738,7 @@ class BaseObserver {
     * This is called by any data change. So that any data change will notify all the callback functions to execute.
     */
     notify() {
+        console.log("this is the subscribers", this.subscribers);
         this.subscribers.map((subscriber) => {
             subscriber(this.data);
         });
@@ -22583,6 +22584,7 @@ class StatefulWidget extends _BaseWidget__WEBPACK_IMPORTED_MODULE_0__.BaseWidget
         }
         //console.log("added-widget-container",this.childWidgetElement);
         // addEvents is called after the element has been mounted.
+        console.log("this is the rendering", this);
         this.after_render();
         // then after the child widgets are again loaded.
         if (this.widgetMounted) {
@@ -22650,6 +22652,7 @@ class StatefulWidget extends _BaseWidget__WEBPACK_IMPORTED_MODULE_0__.BaseWidget
      * for the widget and its html element. User can add any logic here.
      */
     after_render() {
+        console.log("this is calling the after render", this);
     }
     /**
      * render child widgets
@@ -22788,17 +22791,17 @@ class DependencyObserver {
                 this.isUpdating = true;
                 let that = this;
                 setTimeout(function () {
-                    let myEvent = event;
-                    console.log("this is the event", myEvent);
-                    if (!that.compositionIds.includes(myEvent === null || myEvent === void 0 ? void 0 : myEvent.detail)) {
-                        that.compositionIds.unshift(myEvent === null || myEvent === void 0 ? void 0 : myEvent.detail);
-                        that.listenToEvent(myEvent === null || myEvent === void 0 ? void 0 : myEvent.detail);
-                    }
-                    console.log("this is the event after", myEvent);
-                    console.log("this is the type listen", id);
-                    that.isUpdating = false;
-                    that.bind();
-                    that.notify();
+                    return __awaiter(this, void 0, void 0, function* () {
+                        let myEvent = event;
+                        console.log("this is the event", myEvent);
+                        if (!that.compositionIds.includes(myEvent === null || myEvent === void 0 ? void 0 : myEvent.detail)) {
+                            that.compositionIds.unshift(myEvent === null || myEvent === void 0 ? void 0 : myEvent.detail);
+                            that.listenToEvent(myEvent === null || myEvent === void 0 ? void 0 : myEvent.detail);
+                        }
+                        that.isUpdating = false;
+                        yield that.bind();
+                        that.notify();
+                    });
                 }, 200);
             }
             else {
@@ -23010,13 +23013,14 @@ class GetCompositionListObservable extends _DepenedencyObserver__WEBPACK_IMPORTE
                     this.listenToEvent(this.compositionIds[i]);
                 }
             }
-            return yield this.build();
+            let mydata = yield this.build();
+            return mydata;
         });
     }
     build() {
         return __awaiter(this, void 0, void 0, function* () {
             this.data = [];
-            console.log("this is building the data list");
+            console.log("this is building the data list", this.startPage, this.inpage);
             if (this.format == _app__WEBPACK_IMPORTED_MODULE_1__.JUSTDATA) {
                 for (let i = this.startPage; i < this.startPage + this.inpage; i++) {
                     if (this.compositionIds[i]) {
@@ -23057,8 +23061,7 @@ class GetCompositionListObservable extends _DepenedencyObserver__WEBPACK_IMPORTE
  * This function will give you the list of the concepts by composition name with a listener to any data change.
  */
 function GetCompositionListListener(compositionName, userId, inpage, page, format = _app__WEBPACK_IMPORTED_MODULE_1__.JUSTDATA) {
-    let startTime = performance.now();
-    const compositionResult = new GetCompositionListObservable(compositionName, userId, inpage, page, format);
+    return new GetCompositionListObservable(compositionName, userId, inpage, page, format);
     // Add Log
     // Logger.logInfo(
     //     startTime, 
@@ -23073,7 +23076,6 @@ function GetCompositionListListener(compositionName, userId, inpage, page, forma
     //     "UnknownUserAgent",
     //     []
     // );
-    return compositionResult;
 }
 
 
@@ -24374,7 +24376,7 @@ function init() {
                                 console.log("new worker", newWorker);
                                 if (newWorker) {
                                     newWorker.onstatechange = () => __awaiter(this, void 0, void 0, function* () {
-                                        console.warn("on state change triggered", (newWorker.state === "installed" || newWorker.state === "activated" || newWorker.state === 'redundant'), navigator.serviceWorker.controller);
+                                        console.warn("on state change triggered", newWorker.state, navigator.serviceWorker.controller);
                                         if (newWorker.state === "installing") {
                                             console.log("Service Worker installing");
                                             serviceWorker = undefined;
@@ -24388,6 +24390,10 @@ function init() {
                                             console.log("This is a flag after sw init : ", flags);
                                             // serviceWorker = registration.active;
                                             // Send init message now that it's active
+                                            setTimeout(() => {
+                                                console.log('Message Processed after some time');
+                                                processMessageQueue();
+                                            }, 5000);
                                             yield sendMessage("init", {
                                                 url,
                                                 aiurl,
@@ -24513,6 +24519,8 @@ function sendMessage(type, payload) {
         return new Promise((resolve, reject) => {
             // navigator.serviceWorker.ready
             //   .then((registration) => {
+            if (!((navigator.serviceWorker.controller || serviceWorker) && (serviceWorkerReady || type == 'init')))
+                console.log('will go to queue', navigator.serviceWorker.controller, serviceWorker, serviceWorkerReady, type == 'init');
             if ((navigator.serviceWorker.controller || serviceWorker) && (serviceWorkerReady || type == 'init')) {
                 const responseHandler = (event) => {
                     var _a, _b, _c, _d, _e, _f;
@@ -24808,7 +24816,6 @@ function initConceptConnection() {
  */
 function dispatchIdEvent(id, data = {}) {
     // console.log('id event dispatched', id)
-    console.log("this is the dispatched", typeof window, serviceWorker, id);
     if (serviceWorker || typeof window != undefined) {
         // let event = new Event(`${id}`);
         let event = new CustomEvent(`${id}`, data);
@@ -25034,7 +25041,9 @@ self.addEventListener("message", (event) => __awaiter(void 0, void 0, void 0, fu
             yield new Promise((resolve) => {
                 let count = 1;
                 const interval = setInterval(() => {
+                    console.log('Interval check 0', TSCCS_init);
                     if (TSCCS_init) {
+                        console.log('Interval check 2', TSCCS_init);
                         clearInterval(interval);
                         resolve(undefined);
                     }
@@ -25048,6 +25057,7 @@ self.addEventListener("message", (event) => __awaiter(void 0, void 0, void 0, fu
                     resolve(undefined);
                 }, 90000); // 1.5 minute
             });
+            console.log('After timeout promise', TSCCS_init);
             if (!TSCCS_init)
                 event.source.postMessage(responseData);
         }

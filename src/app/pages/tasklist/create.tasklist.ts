@@ -27,7 +27,7 @@ export class CreateTask extends StatefulWidget
      */
     after_render(): void {
         let userId:number = getLocalUserId();
-        let order: 1;
+        let order:number =  1;
         let name = this.getElementById("name") as HTMLInputElement;
         let phone = this.getElementById("description") as HTMLInputElement;
         let id = this.getElementById("id") as HTMLInputElement;

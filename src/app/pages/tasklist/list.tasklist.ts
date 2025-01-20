@@ -1,5 +1,6 @@
 import { BinaryTree, DATAID, DeleteConceptById, GetCompositionListListener, GetLinkListListener, NORMAL, SearchQuery, SearchStructure, StatefulWidget } from "mftsccs-browser";
 import { getLocalUserId } from "../user/login.service";
+import { taskListTest } from "./tasklistservice";
 
 export class ListTask extends StatefulWidget{
     tasklist: any = [];
@@ -18,22 +19,20 @@ export class ListTask extends StatefulWidget{
 
         let searchQuery: SearchQuery = new SearchQuery();
         searchQuery.fullLinkers = ["the_task_contact"];
-        // GetCompositionListListener("the_task", userId, this.inpage, this.page, NORMAL).subscribe((output: any)=>{
-        //     this.tasklist = output;
-        //     this.render();
-        // })
 
-        GetLinkListListener(searchStructure, [searchQuery], "", NORMAL).subscribe((output: any)=>{
-            this.tasklist = output;
-            console.log("this is the output of the list listener", output);
-            this.render();
-        });
+        // GetLinkListListener(searchStructure, [searchQuery], "", NORMAL).subscribe((output: any)=>{
+        //     this.tasklist = output;
+        //     console.log("this is the output of the list listener", output);
+        //     this.render();
+        // });
     }
 
+    
 
 
 
     after_render() {
+     // taskListTest();
       let tableElement = this.getElementById("mainbody");
       if(tableElement){
         console.log("this is the element", tableElement);

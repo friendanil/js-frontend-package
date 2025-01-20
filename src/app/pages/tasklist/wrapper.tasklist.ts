@@ -3,6 +3,7 @@
 import { StatefulWidget } from "mftsccs-browser";
 import { CreateTask } from "./create.tasklist";
 import { ListTask } from "./list.tasklist";
+import { royaltask, taskListTest } from "./tasklistservice";
 
 export class tasklist extends StatefulWidget
 {
@@ -14,7 +15,9 @@ export class tasklist extends StatefulWidget
         let widget2 = this.getElementById("widget2");
         let creating =new CreateTask();
         let listing = new ListTask();
+        //taskListTest();
 
+        royaltask();
          if(widget1){
            this.childWidgets.push(creating);
            creating.mount(widget1);

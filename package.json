@@ -14,14 +14,14 @@
     "vite": "^5.3.1"
   },
   "dependencies": {
-    "mftsccs-browser": "^2.0.19-beta"
+    "mftsccs-browser": "^2.1.6-beta"
   },
   "description": "This is a data fabric project that unifies frontend and backend",
   "main": "src/main.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Mentor-Friends/Freeschema-Frontend.git"
-  },
+  }, 
   "author": "",
   "license": "ISC",
   "bugs": {
