@@ -29,7 +29,7 @@ export class list extends StatefulWidget{
         console.log("this is the element", tableElement, this.myphonebooks.length);
         if(this.myphonebooks.length > 0){
           for(let i= 0; i< this.myphonebooks.length; i++){
-            let id = this.myphonebooks[i].the_phonebook.id;
+            let id = this.myphonebooks[i].the_phonebook?.id;
 
 
             // if the id is present and valid

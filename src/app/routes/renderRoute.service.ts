@@ -76,15 +76,16 @@ export async function checkRouting() {
   /**
    * if the route is of type StatefulWidget then mount the application to the dom.
    */
-  if(Object.getPrototypeOf(view.constructor).name  == "StatefulWidget"){
+  // if(Object.getPrototypeOf(view.constructor).name  == "StatefulWidget"){
+  //   app.innerHTML = "";
     app.innerHTML = "";
     await view?.mount(app);
-  }
-  else{
-    const htmlContentDetails = await view?.getHtml();
-    app.innerHTML = htmlContentDetails;
+  // }
+  // else{
+  //   const htmlContentDetails = await view?.getHtml();
+  //   app.innerHTML = htmlContentDetails;
 
-  }
+  // }
 }
 
 /**
