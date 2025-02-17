@@ -1,21 +1,14 @@
-// src/app/pages/example/wrapper.example.ts
+import { FreeschemaQuery, SchemaQueryListener, StatefulWidget } from "mftsccs-browser"
+import { getLocalUserId } from "../user/login.service";
+import { classlist } from "./classroom.index";
+import { classlistCreate } from "./classroomcreate.index";
 
-import { StatefulWidget } from "mftsccs-browser";
-import { CreateTask } from "./create.tasklist";
-import { ListTask } from "./list.tasklist";
-import { royaltask, santoshTask, taskListTest } from "./tasklistservice";
-
-export class tasklist extends StatefulWidget
-{
-
+export class classlistAll extends StatefulWidget{
     mount_child(){
-        
-
         let widget1 = this.getElementById("widget1");
         let widget2 = this.getElementById("widget2");
-        let creating =new CreateTask();
-        let listing = new ListTask();
-        //taskListTest();
+        let listing =new classlist();
+        let creating = new classlistCreate();
 
          if(widget1){
            this.childWidgets.push(creating);
@@ -24,13 +17,11 @@ export class tasklist extends StatefulWidget
          if(widget2)
          {
             listing.dataChange((value: any)=>{
-
                 this.UpdateChildData(value, creating);
             });
             this.childWidgets.push(listing);
             listing.mount(widget2);
          }
-
 
          
     }
@@ -45,7 +36,9 @@ export class tasklist extends StatefulWidget
                 </div>
                 <div class="flex-container">
                     <div id ="widget2"></div>
-                </div>`
+                </div>
+                `
+                
         return html;
     }
 }

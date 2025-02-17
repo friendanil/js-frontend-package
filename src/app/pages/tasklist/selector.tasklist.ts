@@ -1,5 +1,8 @@
-import { GetCompositionListListener, NORMAL, StatefulWidget } from "mftsccs-browser";
+import { DeleteConnectionByType, GetCompositionListListener, NORMAL, StatefulWidget } from "mftsccs-browser";
 import { getLocalUserId } from "../user/login.service";
+import { bijaySirTask, biprashTask, biprashTask2, BuildWidget, listTask, royaltask, santoshSirTask, santoshTask, withoutfilter } from "./tasklistservice";
+import { trace } from "console";
+import { createFakeData } from "./testservice";
 
 export class selector extends StatefulWidget{
     inpage: number= 10;
@@ -24,8 +27,18 @@ export class selector extends StatefulWidget{
         let phonebookData = this.phonebooks;
 
         let selector = this.getElementById("phonelist") as HTMLInputElement;
+        let desc = document.getElementById("description") as HTMLInputElement;
+        selector.onclick = function(){
+            //createFakeData(3,50);
+            royaltask();
+
+        }
+
+        desc.onclick = function(){
+            santoshTask();
+        }
         if(selector){
-            for(let i=0 ;i< phonebookData.length; i++){
+            for(let i=0 ;i< phonebookData?.length; i++){
                 let newElement = document.createElement("option");
                 newElement.setAttribute("value", phonebookData[i].the_phonebook?.id);
                 console.log("this is the new element", newElement);

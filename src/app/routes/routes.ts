@@ -1,3 +1,6 @@
+import { classlist } from "../pages/classroom/classroom.index.ts";
+import { classlistAll } from "../pages/classroom/classroomall.index.ts";
+import { classlistCreate } from "../pages/classroom/classroomcreate.index.ts";
 import { create } from "../pages/example/create.example.ts";
 import { list } from "../pages/example/list.example.ts";
 import { phonebook } from "../pages/example/wrapper.example.ts";
@@ -71,6 +74,24 @@ const routes: RouteParams[] = [
     path: "/selector",
     linkLabel: "Task List",
     content: selector,
+    isAuthenticated: true
+  },
+  {
+    path: "/classlist",
+    linkLabel: "My Class List",
+    content: classlist,
+    isAuthenticated: true
+  },
+  {
+    path: "/classlist-create",
+    linkLabel: "My Class List create",
+    content: classlistCreate,
+    isAuthenticated: true
+  },
+  {
+    path: "/classlist-all",
+    linkLabel: "My Class List create",
+    content: classlistAll,
     isAuthenticated: true
   },
   {
