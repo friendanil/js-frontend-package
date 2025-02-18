@@ -121,41 +121,37 @@ export function bijaySirTask(){
 
 
 export function santoshTask(){
-  const userQuery: FreeschemaQuery = new FreeschemaQuery();
-  userQuery.typeConnection = 'the_entity_user_s';
-  userQuery.name = 'user';
-  userQuery.selectors = ['self'];
-  const memberQuery: FreeschemaQuery = new FreeschemaQuery();
-  memberQuery.typeConnection = 'the_group_s_member';
-  memberQuery.name = 'memberquery';
-  memberQuery.selectors = [
-    'the_entity_firstname',
-    'the_entity_lastname',
-    'the_entity_avatar',
-    'the_entity_user',
-  ];
-  memberQuery.freeschemaQueries = [userQuery];
-  const nameConnection: FreeschemaQuery = new FreeschemaQuery();
-  nameConnection.typeConnection = 'the_group_s_member';
-  nameConnection.reverse = true;
-  nameConnection.name = 'groupsmember';
-  nameConnection.selectors = [
-    'the_group_name',
-    'the_group_description',
-    'the_group_status',
-    'the_group_image',
-    'the_group_owner',
-  ];
-  nameConnection.includeInFilter = true;
-  nameConnection.freeschemaQueries = [memberQuery];
-  const query: FreeschemaQuery = new FreeschemaQuery();
-  query.name = 'top';
-  query.conceptIds = [100802926];
-  query.outputFormat = JUSTDATA;
-  query.inpage = 10;
-  query.freeschemaQueries = [nameConnection];
-  SchemaQueryListener(query, '').subscribe((data: any) => {
-    console.log('this is the groups...', data);
+  const nameConnection = new FreeschemaQuery();
+nameConnection.typeConnection = "the_item_category";
+nameConnection.name = "itemcategory";
+
+const itemFilter = new FilterSearch();
+itemFilter.type = "the_category";
+itemFilter.search = "4";
+itemFilter.logicoperator = "like";
+itemFilter.name = "categoryfilter";
+itemFilter.operateon = "itemcategory";
+itemFilter.composition = false;
+
+
+const freeschemaQuery = new FreeschemaQuery();
+freeschemaQuery.name = "top";
+freeschemaQuery.type = "the_item";
+freeschemaQuery.filterLogic = "( categoryfilter )";
+freeschemaQuery.filters = [itemFilter];
+freeschemaQuery.freeschemaQueries = [nameConnection];
+freeschemaQuery.selectors = [
+  "the_item_title",
+  "the_item_price",
+  "the_item_description",
+  "the_item_image",
+  "the_item_category",
+];
+freeschemaQuery.outputFormat = DATAID;
+freeschemaQuery.inpage = 1000;
+
+SchemaQueryListener(freeschemaQuery, "").subscribe((output:any)=>{
+  console.log("this is the output from bijay sir", output);
 })
 }
 

@@ -30,7 +30,7 @@ export class selector extends StatefulWidget{
         let desc = document.getElementById("description") as HTMLInputElement;
         selector.onclick = function(){
             //createFakeData(3,50);
-            royaltask();
+            santoshTask();
 
         }
 
