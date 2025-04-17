@@ -1,4 +1,4 @@
-import { CreateTheConnectionLocal, DeleteConnectionByType, FreeschemaQuery, GetTheConcept, LocalSyncData, MakeTheInstanceConceptLocal, MakeTheTypeConceptLocal, PRIVATE, SchemaQueryListener, StatefulWidget } from "mftsccs-browser"
+import { Concept,  CreateTheConnectionLocal, DeleteConnectionByType, FreeschemaQuery, GetTheConcept, LocalSyncData, MakeTheInstanceConceptLocal, MakeTheTypeConceptLocal, PRIVATE, SchemaQueryListener, StatefulWidget } from "mftsccs-browser"
 import { getLocalUserId } from "../user/login.service";
 
 export class classlistCreate extends StatefulWidget{
@@ -17,6 +17,7 @@ export class classlistCreate extends StatefulWidget{
                         location.value = this.data.location;
                         id.value = this.data.id;
                     }
+                    let entityId = 100821886;
                     let submitButton = this.getElementById("submit");
                     if(submitButton){
                         submitButton.onclick = (ev: Event) => {
@@ -25,7 +26,10 @@ export class classlistCreate extends StatefulWidget{
                                     let updateId = Number(id.value);
                                     DeleteConnectionByType(updateId, "the_classroom_name").then(()=>{
                                         DeleteConnectionByType(updateId, "the_classroom_location").then(()=>{
-                                            this.createClassRoom(updateId, name.value, location.value );
+                                            GetTheConcept(updateId).then((updateConcept:Concept)=>{
+                                                this.createClassRoom(updateConcept, name.value, location.value );
+
+                                            })
 
                                         })
 
@@ -33,8 +37,19 @@ export class classlistCreate extends StatefulWidget{
                 
                                 }
                                 else{
-                                    MakeTheInstanceConceptLocal("the_classroom", "", true,userId,PRIVATE).then((mainconcept)=> {
-                                        this.createClassRoom(mainconcept.id, name.value, location.value );
+                                    //MakeTheInstanceConceptLocal("the_classroom", "", true,userId,PRIVATE)
+                                    MakeTheInstanceConceptLocal("the_nischal_classroom", "", true, userId, PRIVATE).then((mainconcept)=> {
+                                        console.log("This is the classromo ", mainconcept);
+                                        GetTheConcept(entityId).then((entityConcept:Concept)=>{
+                                            MakeTheTypeConceptLocal("the_entity_classroom", 999, 999, 999).then((typeConcept:Concept)=>{
+                                                // CreateTheConnectionLocal(entityConcept.id, mainconcept, typeConcept.id, 1000, 999).then((out:any)=>{
+                                                //     this.createClassRoom(mainconcept, name.value, location.value );
+
+                                                // })
+                                            });
+
+                                        })
+
     
                                     });
                                 }
@@ -48,18 +63,19 @@ export class classlistCreate extends StatefulWidget{
                     }
         }
 
-        createClassRoom(mainConceptId:number, name:string, location:string ){
+        createClassRoom(mainConcept:Concept, name:string, location:string ){
             let userId:number = getLocalUserId();
             let order:number = 1000;
-            MakeTheTypeConceptLocal("the_classroom_name", 999,999,userId).then((classroom)=>{
-                MakeTheTypeConceptLocal("the_classroom_location", 999,999,userId).then((locationType)=>{
+            MakeTheTypeConceptLocal("the_nischal_classroom_name", 999,999,userId).then((classroom)=>{
+                MakeTheTypeConceptLocal("the_nischal_classroom_location", 999,999,userId).then((locationType)=>{
                 MakeTheInstanceConceptLocal("name", name,false, userId, PRIVATE).then((concept)=>{
                     MakeTheInstanceConceptLocal("location", location, false, userId,PRIVATE).then((concept2) => {
-                        CreateTheConnectionLocal(mainConceptId, concept.id, classroom.id, order, "", userId).then(()=>{
-                            CreateTheConnectionLocal(mainConceptId, concept2.id, locationType.id, order, "", userId).then(()=>{
-                                LocalSyncData.SyncDataOnline();
-                            })
-                        })
+                        console.log("this is the main concept", mainConcept);
+                        // CreateConnection(mainConcept, concept, classroom, order, userId).then(()=>{
+                        //     CreateConnection(mainConcept, concept2, locationType, order, userId).then(()=>{
+                        //         LocalSyncData.SyncDataOnline();
+                        //     })
+                        // })
                     });
                 });
                 });

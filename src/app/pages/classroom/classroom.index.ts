@@ -1,4 +1,4 @@
-import { FreeschemaQuery, JUSTDATA, renderWidget, SchemaQueryListener, StatefulWidget } from "mftsccs-browser"
+import { CreateData, createPrototypeLocal, FreeschemaQuery, JUSTDATA, LocalSyncData, NORMAL, Prototype, renderWidget, SchemaQueryListener, StatefulWidget } from "mftsccs-browser"
 import { getLocalUserId } from "../user/login.service";
 import { classroomView } from "./classroom.view";
 import { classroomDelete } from "./classroom.delete";
@@ -8,15 +8,16 @@ export class classlist extends StatefulWidget{
         before_render(): void {
             let userId: number = getLocalUserId();
             let classroomdata:FreeschemaQuery = new FreeschemaQuery();
-            classroomdata.typeConnection = "the_classroom_name";
+            classroomdata.typeConnection = "the_nischal_classroom_name";
             classroomdata.name = "classroomdata";
 
             let freeschemaQuery:FreeschemaQuery = new FreeschemaQuery();
-            freeschemaQuery.type = "the_classroom";
+            freeschemaQuery.type = "the_nischal_classroom";
             freeschemaQuery.name = "top";
             freeschemaQuery.freeschemaQueries = [classroomdata];
             freeschemaQuery.outputFormat = JUSTDATA;
-            freeschemaQuery.selectors = ["the_classroom_location"];
+            freeschemaQuery.inpage = 100;
+            freeschemaQuery.selectors = ["the_nischal_classroom_location"];
 
 
 
@@ -28,6 +29,10 @@ export class classlist extends StatefulWidget{
         }
 
         after_render() {
+
+
+
+
               let tableElement = this.getElementById("mainbody");
               if(tableElement){
                 console.log("this is the element", tableElement, this.myphonebooks?.length);
@@ -46,8 +51,8 @@ export class classlist extends StatefulWidget{
                         let col4 = document.createElement("td");
                         let col5 = document.createElement("td");
                         let name = document.createElement("span");
-                        let nameValue = data.the_classroom_name?.the_name.data;
-                        let locationValue = data.the_classroom_location?.the_location.data;
+                        let nameValue = data?.the_nischal_classroom_name?.the_name.data;
+                        let locationValue = data?.the_nischal_classroom_location?.the_location.data;
                         name.innerHTML = nameValue;
                         let phone = document.createElement("span");
                         phone.innerHTML = locationValue;

@@ -1,4 +1,4 @@
-import { BinaryTree, DATAID, DeleteConceptById, GetCompositionListListener, GetLinkListListener, NORMAL, SearchQuery, SearchStructure, StatefulWidget } from "mftsccs-browser";
+import { BinaryTree, DATAID, DeleteConceptById, FreeschemaQuery, GetCompositionListListener, GetLinkListListener, NORMAL, SearchQuery, SearchStructure, StatefulWidget } from "mftsccs-browser";
 import { getLocalUserId } from "../user/login.service";
 import { taskListTest } from "./tasklistservice";
 import { Tracer } from "../../default/tracer";
@@ -9,7 +9,6 @@ export class ListTask extends StatefulWidget{
     page: number = 1;
     linker: string = "console_folder_s";
 
-    @Tracer
     before_render(): void {
 
         let searchStructure: SearchStructure = new SearchStructure();
@@ -33,6 +32,8 @@ export class ListTask extends StatefulWidget{
 
 
     after_render() {
+
+
      // taskListTest();
       let tableElement = this.getElementById("mainbody");
       if(tableElement){

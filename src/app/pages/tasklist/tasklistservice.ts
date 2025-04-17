@@ -1,4 +1,4 @@
-import { BuildWidgetFromId, CreateTheCompositionLocal, DATAID, FilterSearch, FreeschemaQuery, GetCompositionFromConnectionsWithDataIdIndex, GetTheConcept, JUSTDATA, LocalSyncData, NORMAL, renderWidget, SchemaQueryListener } from "mftsccs-browser";
+import { BuildWidgetFromId, CreateTheCompositionLocal, DATAID, FilterSearch, FreeschemaQuery, GetCompositionFromConnectionsWithDataIdIndex, GetTheConcept, JUSTDATA, LocalSyncData, Logger, NORMAL, renderWidget, SchemaQueryListener } from "mftsccs-browser";
 import { join } from "path";
 import { Tracer } from "../../default/tracer";
 import { group } from "console";
@@ -83,128 +83,232 @@ export function listTask(){
 
 
 export function bijaySirTask(){
-  let docs = document.getElementById("app");
-  if(docs){
-    renderWidget(101471811, docs );
 
-  }
-  // const  groupMembers = new FreeschemaQuery();
-  // groupMembers.typeConnection = "the_group_s_member";
-  // groupMembers.name = "newGroup";
-  // groupMembers.selectors = [    
-  //   'the_entity_firstname'
-  // ];
+  const filters = new FilterSearch();
+  filters.type = "the_firstname";
+  filters.search = "Nischal";
+  filters.operateon = 'groupsmember';
+  filters.logicoperator = "=";
+  filters.name = "myfilter";
+
+  const nameConnection = new FreeschemaQuery();
+  nameConnection.typeConnection = 'the_entity_firstname';
+  nameConnection.name = 'groupsmember';
+  nameConnection.selectors = [
+    "the_entity_email"
+  ];
+  const query = new FreeschemaQuery();
+  query.filters = [filters];
+  query.filterLogic = "( myfilter )";
+  query.name = 'top';
+  query.outputFormat = JUSTDATA;
+  query.type = "the_entity"
+  query.inpage = 10;
+  query.freeschemaQueries = [nameConnection];
+  SchemaQueryListener(query, '').subscribe((data: any) => {
+    console.log('data.....', data);
+  })
+}
 
 
-  // const nameConnection = new FreeschemaQuery();
-  // nameConnection.typeConnection = 'the_group_s_member';
-  // nameConnection.reverse = true;
-  // nameConnection.name = 'groupsmember';
-  // nameConnection.selectors = [
-  //   'the_group_name',
-  //   'the_group_description',
-  //   'the_group_status',
-  //   'the_group_image',
-  //   'the_group_owner',
-  // ];
-  // nameConnection.freeschemaQueries = [groupMembers];
-  // const query = new FreeschemaQuery();
-  // query.name = 'top';
-  // query.conceptIds = [101968750];
-  // query.outputFormat = JUSTDATA;
-  // query.inpage = 10;
-  // query.freeschemaQueries = [nameConnection];
-  // SchemaQueryListener(query, '').subscribe((data: any) => {
-  //   console.log('data.....', data);
-  // })
+export function mailFilter(inpage:number = 10, page:number = 1, doFilter:boolean = true){
+  const subjectFilter = new FilterSearch()
+    subjectFilter.name = 'subjectFilter'
+    subjectFilter.type = 'the_subject';
+    subjectFilter.logicoperator = 'like';
+    subjectFilter.search = 'hi';
+    subjectFilter.operateon = 'subject';
+
+    const mailTextFilter = new FilterSearch()
+    mailTextFilter.name = 'mailTextFilter'
+    mailTextFilter.type = 'the_text';
+    mailTextFilter.logicoperator = 'like';
+    mailTextFilter.search = 'hi';
+    mailTextFilter.operateon = 'mail_text';
+
+    const flagQuery = new FreeschemaQuery();
+    flagQuery.name = 'flag';
+    flagQuery.typeConnection = 'the_mail_s_flag';
+
+    const attachmentQuery = new FreeschemaQuery();
+    attachmentQuery.name = 'attachment';
+    attachmentQuery.typeConnection = 'the_mail_s_attachment';
+
+    // const inReplytToQuery = new FreeschemaQuery();
+    // inReplytToQuery.name = 'inReplyTo';
+    // inReplytToQuery.typeConnection = 'the_mail_inreplyto';
+
+    const subjectQuery = new FreeschemaQuery();
+    subjectQuery.name = 'subject';
+    subjectQuery.typeConnection = 'the_mail_subject';
+
+    const mailTextQuery = new FreeschemaQuery();
+    mailTextQuery.name = 'mail_text';
+    mailTextQuery.typeConnection = 'the_mail_text';
+
+    const toQuery = new FreeschemaQuery();
+    toQuery.name = 'to';
+    toQuery.typeConnection = 'the_mail_s_to';
+    toQuery.selectors = ['the_to_address', 'the_to_name'];
+
+    const fromQuery = new FreeschemaQuery();
+    fromQuery.name = 'from';
+    fromQuery.typeConnection = 'the_mail_s_from';
+    fromQuery.selectors = ['the_from_address', 'the_from_name'];
+
+    const mailQuery = new FreeschemaQuery();
+    mailQuery.name = 'mail';
+      mailQuery.typeConnection = `smtpDetail_s_sent`;
+    mailQuery.freeschemaQueries = [subjectQuery, fromQuery, toQuery, attachmentQuery, flagQuery, mailTextQuery];
+    mailQuery.selectors = [
+      'the_mail_uid',
+      'the_mail_messageid',
+      'the_mail_receiveddate',
+      'the_mail_date',
+      'the_mail_headers',
+      'the_mail_html',
+      'the_mail_textashtml',
+      'the_mail_inreplyto',
+    ];
+    mailQuery.includeInFilter = true
+    mailQuery.page = page
+    mailQuery.inpage = inpage
+    mailQuery.limit = true
+    mailQuery.order = "DESC";
+
+    const smtpQuery = new FreeschemaQuery();
+    smtpQuery.name = 'smtp';
+    smtpQuery.conceptIds = [102873173];
+    smtpQuery.freeschemaQueries = [mailQuery];
+    smtpQuery.filters = [ subjectFilter, mailTextFilter ]
+    if(doFilter){
+      smtpQuery.filterLogic = "( subjectFilter OR mailTextFilter )"
+
+    }
+    smtpQuery.outputFormat = JUSTDATA;
+
+    SchemaQueryListener(smtpQuery,"").subscribe((output:any)=>{
+      console.log("this is the filter for the mail filter", output);
+    })
 }
 
 
 export function santoshTask(){
-  const nameConnection = new FreeschemaQuery();
-nameConnection.typeConnection = "the_item_category";
-nameConnection.name = "itemcategory";
+  const issueFilter = new FilterSearch();
+  issueFilter.name = 'issueFilter';
+  issueFilter.type = 'the_type';
+  issueFilter.search = 'bug';
+  issueFilter.logicoperator = '=';
+  issueFilter.operateon = 'selfdata';
+  // issueFilter.composition = true;
+  const issueCategoryFilter = new FilterSearch();
+  issueCategoryFilter.name = 'issueCategoryFilter';
+  issueCategoryFilter.type = 'id';
+  issueCategoryFilter.search = '0';
+  issueCategoryFilter.logicoperator = '>';
+  issueCategoryFilter.operateon = 'issueCategory';
+  const issueCommentFilter = new FilterSearch();
+  issueCommentFilter.name = 'issueCommentFilter';
+  issueCommentFilter.type = 'id';
+  issueCommentFilter.search = '0';
+  issueCommentFilter.logicoperator = '>';
+  issueCommentFilter.operateon = 'issueResolution';
+  const issueCategoryQuery = new FreeschemaQuery();
+  issueCategoryQuery.name = 'issueCategory';
+  issueCategoryQuery.typeConnection = 'the_issue_category';
 
-const itemFilter = new FilterSearch();
-itemFilter.type = "the_category";
-itemFilter.search = "4";
-itemFilter.logicoperator = "like";
-itemFilter.name = "categoryfilter";
-itemFilter.operateon = "itemcategory";
-itemFilter.composition = false;
+  const selfQuery = new FreeschemaQuery();
+  selfQuery.name = 'selfdata';
+  selfQuery.typeConnection = 'self';
+  // issueCategoryQuery.includeInFilter = true;
+  const issueResolutionQuery = new FreeschemaQuery();
+  issueResolutionQuery.name = 'issueResolution';
+  issueResolutionQuery.typeConnection = 'issueComment_resolution';
+  const issueCommentQuery = new FreeschemaQuery();
+  issueCommentQuery.name = 'issueComment';
+  issueCommentQuery.isOldConnectionType = true;
+  issueCommentQuery.typeConnection = 'projectIssue_s_project_issue_comment_s';
+  issueCommentQuery.selectors = ['self'];
+  issueCommentQuery.freeschemaQueries = [issueResolutionQuery];
+  const issueQuery = new FreeschemaQuery();
+  issueQuery.name = 'issue';
+  issueQuery.isOldConnectionType = true;
+  issueQuery.typeConnection = 'boomFolder_s_project_issue_s';
+  issueQuery.selectors = ['self'];
+  issueQuery.freeschemaQueries = [issueCommentQuery, issueCategoryQuery,selfQuery];
+  // issueQuery.includeInFilter = true;
+  const query = new FreeschemaQuery();
+  query.name = 'project';
+  query.conceptIds = [101579679];
+  query.freeschemaQueries = [issueQuery];
+  query.outputFormat = JUSTDATA;
+  query.filters = [issueCommentFilter, issueCategoryFilter, issueFilter];
+  query.filterLogic =
+    '( issueCommentFilter AND issueCategoryFilter OR issueFilter )';
 
 
-const freeschemaQuery = new FreeschemaQuery();
-freeschemaQuery.name = "top";
-freeschemaQuery.type = "the_item";
-freeschemaQuery.filterLogic = "( categoryfilter )";
-freeschemaQuery.filters = [itemFilter];
-freeschemaQuery.freeschemaQueries = [nameConnection];
-freeschemaQuery.selectors = [
-  "the_item_title",
-  "the_item_price",
-  "the_item_description",
-  "the_item_image",
-  "the_item_category",
-];
-freeschemaQuery.outputFormat = DATAID;
-freeschemaQuery.inpage = 1000;
 
-SchemaQueryListener(freeschemaQuery, "").subscribe((output:any)=>{
-  console.log("this is the output from bijay sir", output);
-})
+
+
+
+
+  // query.includeInFilter = true;
+  console.log('Sending query for project issue', query);
+  // Your fetch logic here
+  SchemaQueryListener(query, '').subscribe((value:any) => {
+    console.log('Project data from FreeschemaQuery:', value);
+    const issues = value?.[0]?.boomFolder?.boomFolder_s_project_issue_s || [];
+    console.log('Project issues:', issues);
+    // Call the table generation function
+  });
 }
 
 export function royaltask(){
-  let roomDescription = new FreeschemaQuery();
-  roomDescription.typeConnection = 'the_room_description';
-  roomDescription.name = 'room_description';
-  let roomTitle = new FreeschemaQuery();
-  roomTitle.typeConnection = 'the_room_name';
-  roomTitle.name = 'room_name';
-  let entityFirstname = new FreeschemaQuery();
-  entityFirstname.typeConnection = 'the_entity_firstname';
-  entityFirstname.name = 'entity_firstname';
-  let entityLastname = new FreeschemaQuery();
-  entityLastname.typeConnection = 'the_entity_lastname';
-  entityLastname.name = 'entity_lastname';
-  let entityEmail = new FreeschemaQuery();
-  entityEmail.typeConnection = 'the_entity_email';
-  entityEmail.name = 'entity_email';
-  let roomOwnerReverse = new FreeschemaQuery();
-  roomOwnerReverse.typeConnection = 'the_room_owner';
-  roomOwnerReverse.reverse = true;
-  roomOwnerReverse.name = 'room_owner_reverse';
-  roomOwnerReverse.freeschemaQueries = [roomDescription, roomTitle];
-  let roomOwner = new FreeschemaQuery();
-  roomOwner.typeConnection = 'the_room_owner';
-  roomOwner.name = 'room_owner';
-  roomOwner.freeschemaQueries = [entityFirstname, entityLastname, entityEmail];
-  let roomName = new FreeschemaQuery();
-  roomName.typeConnection = 'the_room_name';
-  roomName.name = 'room_name';
-  let roomMembers = new FreeschemaQuery();
-  roomMembers.typeConnection = 'the_room_s_member';
-  roomMembers.reverse = true;
-  roomMembers.name = 'room_members';
-  roomMembers.freeschemaQueries = [roomDescription, roomTitle, roomOwner];
-  let freeschemaQuery = new FreeschemaQuery();
-  freeschemaQuery.name = 'top';
-  freeschemaQuery.conceptIds = [101295849];
-  freeschemaQuery.freeschemaQueries = [
-    roomMembers,
-    roomOwnerReverse,
-    entityFirstname,
-    entityFirstname,
-    entityEmail,
-  ];
-  freeschemaQuery.outputFormat = DATAID;
-  freeschemaQuery.inpage = 100;
-  freeschemaQuery.limit = false;
-  SchemaQueryListener(freeschemaQuery, '').subscribe((output:any) => {console.log("output for room data", output)})
+  const userQuery: FreeschemaQuery = new FreeschemaQuery();
+      userQuery.typeConnection = 'the_entity_user_s';
+      userQuery.name = 'user';
+      userQuery.selectors = ['self'];
+      const memberQuery: FreeschemaQuery = new FreeschemaQuery();
+      memberQuery.typeConnection = 'the_group_s_member';
+      memberQuery.name = 'memberquery';
+      memberQuery.selectors = [
+        'the_entity_firstname',
+        'the_entity_lastname',
+        'the_entity_avatar',
+        'the_entity_user',
+      ];
+      memberQuery.freeschemaQueries = [userQuery];
+      const nameConnection: FreeschemaQuery = new FreeschemaQuery();
+      nameConnection.typeConnection = 'the_group_s_member';
+      nameConnection.reverse = true;
+      nameConnection.name = 'groupsmember';
+      nameConnection.selectors = [
+        'the_group_name',
+        'the_group_description',
+        'the_group_status',
+        'the_group_image',
+        'the_group_owner',
+      ];
+      nameConnection.freeschemaQueries = [memberQuery];
+      const query: FreeschemaQuery = new FreeschemaQuery();
+      query.name = 'top';
+      query.conceptIds = [100802926];
+      query.outputFormat = JUSTDATA;
+      query.inpage = 10;
+      query.freeschemaQueries = [nameConnection];
+      SchemaQueryListener(query, '').subscribe((data: any) => {
+        console.log('this is the groups...', data);
+})
 
 }
 
+
+export  function getWidget(id:number, renderLatest:boolean = false){
+   BuildWidgetFromId(id).then((output:any)=>{
+    console.log("this is the widget", output);
+
+  })
+}
 
 export function biprashTask2(){
   const month = '2025-01-31'
@@ -295,6 +399,18 @@ export function biprashTask2(){
 SchemaQueryListener(query, "").subscribe((value: any) => {
       console.log('temp', value)
 })
+}
+
+export function nischalTask(){
+  let freeschemaQuery = new FreeschemaQuery();
+  freeschemaQuery.name = "top";
+  freeschemaQuery.type = "the_item";
+  freeschemaQuery.selectors = [
+    "the_item_name",
+  ]
+  SchemaQueryListener(freeschemaQuery,"").subscribe((output:any)=>{
+    console.log("this is the output", output);
+  })
 }
 
 export function biprashTask(){
@@ -576,7 +692,7 @@ export function withoutfilter(){
 export function BuildWidget(){
   let body = document.getElementById("widget2");
   if(body){
-    renderWidget(101665399,body).then((output:any)=>{
+    renderWidget(101680065,body).then((output:any)=>{
       console.log("this is the widget build", output);
     })
   }

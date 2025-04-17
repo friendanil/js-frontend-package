@@ -1,6 +1,6 @@
-import { DeleteConnectionByType, GetCompositionListListener, NORMAL, StatefulWidget } from "mftsccs-browser";
+import { DeleteConnectionByType, GetCompositionListListener, NORMAL, renderLatestWidget, renderWidget, StatefulWidget } from "mftsccs-browser";
 import { getLocalUserId } from "../user/login.service";
-import { bijaySirTask, biprashTask, biprashTask2, BuildWidget, listTask, royaltask, santoshSirTask, santoshTask, withoutfilter } from "./tasklistservice";
+import { bijaySirTask, biprashTask, biprashTask2, BuildWidget, getWidget, listTask, mailFilter, nischalTask, royaltask, santoshSirTask, santoshTask, withoutfilter } from "./tasklistservice";
 import { trace } from "console";
 import { createFakeData } from "./testservice";
 
@@ -30,12 +30,12 @@ export class selector extends StatefulWidget{
         let desc = document.getElementById("description") as HTMLInputElement;
         selector.onclick = function(){
             //createFakeData(3,50);
-            santoshTask();
+            mailFilter(10,1, false);
 
         }
 
         desc.onclick = function(){
-            santoshTask();
+            mailFilter(10,1, true);
         }
         if(selector){
             for(let i=0 ;i< phonebookData?.length; i++){

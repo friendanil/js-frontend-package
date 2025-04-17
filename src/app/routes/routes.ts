@@ -1,3 +1,5 @@
+import { builder } from "../pages/builder/builder.index.ts";
+import { CreatePrototype } from "../pages/builder/createprototype.index.ts";
 import { classlist } from "../pages/classroom/classroom.index.ts";
 import { classlistAll } from "../pages/classroom/classroomall.index.ts";
 import { classlistCreate } from "../pages/classroom/classroomcreate.index.ts";
@@ -98,6 +100,18 @@ const routes: RouteParams[] = [
     path: "/example-list",
     linkLabel: "Example",
     content: list,
+    isAuthenticated: true
+  },
+  {
+    path: "/builder",
+    linkLabel: "Builder",
+    content: builder,
+    isAuthenticated: true
+  },
+  {
+    path: "/prototype",
+    linkLabel: "Prototype",
+    content: CreatePrototype,
     isAuthenticated: true
   },
   {
